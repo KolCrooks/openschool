@@ -13,6 +13,8 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
@@ -20,6 +22,7 @@ import React, { useEffect, useState } from "react";
 import Video from "../../../components/video";
 import ProblemCard from "../../../components/ProblemCard";
 import ProblemCreator from "../../../components/problemCreator";
+import VideoView from "../../../components/videoView";
 
 const drawerWidth = 240;
 
@@ -49,6 +52,10 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "space-between",
       alignItems: "flex-end",
     },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: "#fff",
+    },
   })
 );
 
@@ -59,27 +66,41 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const { unit } = props;
   const [open, setOpen] = useState(false);
   const [vidOpen, vidSetOpen] = useState(false);
-  const [confirmOpen, confirmSetOpen] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+
   var embedLink = "";
 
-  console.log("hi", props);
   const handleClickOpenVid = () => {
     vidSetOpen(true);
   };
-  const handleCloseVid = () => {
-    vidSetOpen(false);
-    console.log(linkText);
+  const handleCloseVid = async () => {
     embedLink = linkText.replace(
       "https://youtu.be/",
       "https://www.youtube.com/embed/"
     );
-    console.log(embedLink);
+    setLoading(true);
+    await fetch("/api/video", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: embedLink,
+        unitId: props.unit._id,
+      }),
+    });
+    setLoading(false);
+    vidSetOpen(false);
   };
 
   const [linkText, setLinkText] = useState("");
 
   return (
     <div className={classes.root}>
+      <Backdrop className={classes.backdrop} open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <CssBaseline />
       <Header name={props.unit.name} />
       <Sidebar course={props.course} units={props.course.units} />
@@ -95,17 +116,13 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
             >
               Add Video
             </Button>
-            <Dialog
-              open={vidOpen}
-              onClose={handleCloseVid}
-              aria-labelledby="form-dialog-title"
-            >
+            <Dialog open={vidOpen} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add Video</DialogTitle>
               <DialogContent>
                 <DialogContentText>
                   To add a video, upload it to YouTube, click share, and copy
-                  the link provided by clicking &quot Copy&quot or highlight and
-                  then copy the link. Paste the link here
+                  the link provided by clicking "Copy" or highlight and then
+                  copy the link. Paste the link here
                 </DialogContentText>
                 <TextField
                   autoFocus
@@ -117,40 +134,12 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
                 />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCloseVid} color="primary">
+                <Button onClick={() => vidSetOpen(false)} color="primary">
                   Cancel
                 </Button>
                 <Button onClick={handleCloseVid} color="primary">
                   Upload
                 </Button>
-                {/* <Dialog
-                  open={confirmOpen}
-                  onClose={handleCloseConfirm}
-                  aria-labelledby="form-dialog-title"
-                >
-                  <DialogContent>
-                    <DialogContentText>
-                      Confirm this is the vide you want
-                    </DialogContentText>
-                    <Video vidLink={embedLink} />
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      label="Link goes here"
-                      onChange={(e) => setLinkText(e.target.value)}
-                      fullWidth
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleCloseVid} color="primary">
-                      Cancel
-                    </Button>
-                    <Button onClick={handleCloseVid} color="primary">
-                      Upload
-                    </Button>
-                  </DialogActions>
-                </Dialog> */}
               </DialogActions>
             </Dialog>
           </div>
@@ -159,7 +148,7 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
               There is no video content yet
             </Typography>
           ) : (
-            ""
+            <VideoView videos={props.unit.videos.map((v) => v.content)} />
           )}
         </div>
         <div className={classes.problems}>

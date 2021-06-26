@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 export interface IUser {
   _id: string;
-  display_name: string;
   email: string;
   posts: string[];
   isAdmin: boolean;

@@ -85,7 +85,10 @@ export default function ProblemCard(props: { problem: IProblem }) {
             </Typography>
             <Tooltip
               title="Downvote"
-              onClick={() => (vote === "-1" ? setVote("0") : setVote("-1"))}
+              onClick={() => {
+                // if(vote === "-1")
+                // } ? setVote("0") : setVote("-1");
+              }}
             >
               <IconButton>
                 <ArrowDownward color={vote === "-1" ? "error" : undefined} />
