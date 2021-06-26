@@ -22,7 +22,7 @@ export default async function handler(
 
   const { unit } = req.body;
   if (!unit) return res.status(400).send("");
-  console.log(unit);
+
   const v = await Unit.create({
     course: "60d7278498520e2ba9eca8a0",
     name: unit,

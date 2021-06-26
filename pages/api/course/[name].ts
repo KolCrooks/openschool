@@ -14,7 +14,7 @@ export default async function handler(
     name: { $regex: new RegExp(req.query.name as string, "i") },
   });
   if (!course) return res.status(404).send("");
-  console.log(course);
+
   const o = {
     _id: course?.id,
     name: course.name,

@@ -1,9 +1,11 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { ICourse } from "../../../models/course";
 import { FullUnit, IUnit } from "../../../models/unit";
-
+import { useSession } from "next-auth/client";
 export default function Unit(props: { unit: FullUnit }) {
   const { unit } = props;
+  const [session, loading] = useSession();
+  console.log(session, loading);
   return <div>{unit.name}</div>;
 }
 
@@ -17,12 +19,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
       course: (u.course as unknown as ICourse).name.toLowerCase(),
     },
   }));
-  console.log(paths);
   return { paths, fallback: false };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log(params);
   if (!params) throw new Error("help");
 
   const res = await fetch(`http://${process.env.host}/api/unit/${params.unit}`);

@@ -16,14 +16,13 @@ import MultilineChartIcon from "@material-ui/icons/MultilineChart";
 import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import { IUnit } from "../models/unit";
+import { useRouter } from "next/dist/client/router";
 
 const drawerWidth = 240;
 const iconLabels = [
   <ChromeReaderModeIcon key={0} />,
   <PlayCircleFilledWhiteIcon key={1} />,
 ];
-
-const links = ["/", "/courses/algebra"];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,7 +52,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
   const classes = useStyles();
-  console.log(props);
+  const router = useRouter();
+  const links = ["/", `/courses/${props.courseName.toLowerCase()}`];
+  console.log(router.pathname);
   return (
     <Drawer
       className={classes.drawer}
@@ -67,7 +68,13 @@ export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
 
       <List>
         {["Main Page", "0. Introduction"].map((text, index) => (
-          <ListItem button key={text} component="a" href={links[index]}>
+          <ListItem
+            button
+            key={text}
+            component="a"
+            href={links[index]}
+            selected={router.pathname === links[index]}
+          >
             <ListItemIcon>{iconLabels[index]}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
@@ -77,6 +84,10 @@ export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
             button
             key={index}
             component="a"
+            selected={
+              router.pathname ===
+              `/courses/${props.courseName.toLowerCase()}/${unit.name.toLowerCase()}`
+            }
             href={`/courses/${props.courseName.toLowerCase()}/${unit.name.toLowerCase()}`}
           >
             <ListItemText primary={unit.name} />

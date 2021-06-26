@@ -8,11 +8,6 @@ interface IUser {
   since: Date;
 }
 const user = new Schema<IUser>({
-  display_name: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   email: {
     type: String,
     required: true,
