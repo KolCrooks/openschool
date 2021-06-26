@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 interface ICourse {
   name: string;
-  topics: string;
+  units: string[];
 }
 
 const course = new Schema<ICourse>({
@@ -12,7 +12,7 @@ const course = new Schema<ICourse>({
     required: true,
     unique: true,
   },
-  topics: [
+  units: [
     {
       type: Schema.Types.ObjectId,
       default: [],
@@ -20,6 +20,8 @@ const course = new Schema<ICourse>({
   ],
 });
 
-const Course = mongoose.model<ICourse>("Course", course);
+const Course = mongoose.models.Course
+  ? mongoose.models.Course
+  : mongoose.model<ICourse>("Course", course);
 
 export default Course;

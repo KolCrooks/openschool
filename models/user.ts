@@ -30,6 +30,8 @@ const user = new Schema<IUser>({
   },
 });
 
-const User = mongoose.model<IUser>("User", user);
+const User = mongoose.models.User
+  ? mongoose.models.User
+  : mongoose.model<IUser>("User", user);
 
 export default User;

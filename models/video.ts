@@ -24,6 +24,8 @@ const video = new Schema<IVideo>({
   },
 });
 
-const Video = mongoose.model<IVideo>("Video", video);
+const Video = mongoose.models.Video
+  ? mongoose.models.video
+  : mongoose.model<IVideo>("Video", video);
 
 export default Video;

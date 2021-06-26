@@ -28,6 +28,8 @@ const problem = new Schema<IProblem>({
   },
 });
 
-const Problem = mongoose.model<IProblem>("Problem", problem);
+const Problem = mongoose.models.Problem
+  ? mongoose.models.Problem
+  : mongoose.model<IProblem>("Problem", problem);
 
 export default Problem;

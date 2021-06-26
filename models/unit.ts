@@ -32,6 +32,8 @@ const unit = new Schema<IUnit>({
   ],
 });
 
-const Unit = mongoose.model<IUnit>("Unit", unit);
+const Unit = mongoose.models.Unit
+  ? mongoose.models.Unit
+  : mongoose.model<IUnit>("Unit", unit);
 
 export default Unit;
