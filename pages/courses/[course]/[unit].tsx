@@ -1,38 +1,28 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { FullCourse, ICourse } from "../../../models/course";
 import { FullUnit, IUnit } from "../../../models/unit";
-import { useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/client";
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles";
-
-import { CssBaseline, Typography, Button } from "@material-ui/core";
+import {
+  CssBaseline,
+  Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+} from "@material-ui/core";
 import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
-import Add from "@material-ui/icons/Add";
-import Problem from "../../../components/ProblemCard";
-import Dialog from "@material-ui/core/Dialog";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Slide from "@material-ui/core/Slide";
-import { TransitionProps } from "@material-ui/core/transitions";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import TextField from "@material-ui/core/TextField";
 import React, { useEffect, useState } from "react";
 import Video from "../../../components/video";
+import ProblemCard from "../../../components/ProblemCard";
+import ProblemCreator from "../../../components/problemCreator";
 
 const drawerWidth = 240;
-const mkdn = `Lift($L$) can be determined by Lift Coefficient ($C_L$) like the following equation.
-$$
-L = \\frac{1}{2} \\rho v^2 S C_L
-$$`;
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -59,40 +49,20 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "space-between",
       alignItems: "flex-end",
     },
-    appBar: {
-      position: "relative",
-    },
-    title: {
-      marginLeft: theme.spacing(2),
-      flex: 1,
-    },
   })
 );
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & { children?: React.ReactElement },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const classes = useStyles();
   const [session, loading] = useSession();
+  const [openEditor, setOpenEditor] = useState(false);
   const { unit } = props;
   const [open, setOpen] = useState(false);
   const [vidOpen, vidSetOpen] = useState(false);
   const [confirmOpen, confirmSetOpen] = useState(false);
   var embedLink = "";
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  console.log("hi", props);
   const handleClickOpenVid = () => {
     vidSetOpen(true);
   };
@@ -104,15 +74,6 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
       "https://www.youtube.com/embed/"
     );
     console.log(embedLink);
-    handleOpenConfirm();
-  };
-
-  const handleOpenConfirm = () => {
-    confirmSetOpen(true);
-  };
-
-  const handleCloseConfirm = () => {
-    confirmSetOpen(false);
   };
 
   const [linkText, setLinkText] = useState("");
@@ -143,8 +104,8 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
               <DialogContent>
                 <DialogContentText>
                   To add a video, upload it to YouTube, click share, and copy
-                  the link provided by clicking "Copy" or highlight and then
-                  copy the link. Paste the link here
+                  the link provided by clicking &quot Copy&quot or highlight and
+                  then copy the link. Paste the link here
                 </DialogContentText>
                 <TextField
                   autoFocus
@@ -206,56 +167,28 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
             <Typography variant="h4">Problems</Typography>
             <Button
               variant="outlined"
+              onClick={() => {
+                if (!session?.user) return signIn("google");
+                setOpenEditor(true);
+              }}
               color="primary"
-              onClick={handleClickOpen}
             >
               Add Problem
             </Button>
-            <Dialog
-              fullScreen
-              open={open}
-              onClose={handleClose}
-              TransitionComponent={Transition}
-            >
-              <AppBar className={classes.appBar}>
-                <Toolbar>
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    onClick={handleClose}
-                    aria-label="close"
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                  <Typography variant="h6" className={classes.title}>
-                    Problem
-                  </Typography>
-                  <Button autoFocus color="inherit" onClick={handleClose}>
-                    Submit
-                  </Button>
-                </Toolbar>
-              </AppBar>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Type your problem here"
-                multiline
-              />
-            </Dialog>
           </div>
-          <Problem
-            problem={{
-              _id: "abc",
-              authorId: "",
-              content: mkdn,
-              created: new Date(),
-              score: 0,
-              solution: mkdn,
-              unitId: unit.name,
-            }}
-          ></Problem>
+          {unit.problems.length === 0 ? (
+            <Typography variant="body1">There are no problems yet</Typography>
+          ) : (
+            props.unit.problems.map((p) => (
+              <ProblemCard problem={p} key={p._id} />
+            ))
+          )}
         </div>
+        <ProblemCreator
+          open={openEditor}
+          unitId={props.unit._id}
+          onClose={() => setOpenEditor(false)}
+        />
       </main>
     </div>
   );

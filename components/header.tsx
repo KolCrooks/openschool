@@ -36,7 +36,7 @@ export default function Header(props: { name: String }) {
         </Typography>
         {!session && (
           <>
-            <Button color="inherit" onClick={() => signIn()}>
+            <Button color="inherit" onClick={() => signIn("google")}>
               Sign in
             </Button>
           </>

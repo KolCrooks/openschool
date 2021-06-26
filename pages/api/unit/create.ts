@@ -17,7 +17,6 @@ export default async function handler(
   const { name, courseId } = req.body;
   if (!name || !courseId) return res.status(400).send("");
   const session = await getSession({ req });
-  console.log(session);
   if (!session?.user?.isAdmin) return res.status(401).send("");
 
   const v = new Unit({ name, course: courseId });

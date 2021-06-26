@@ -96,7 +96,6 @@ export default function Sidebar(props: {
     setOpen(false);
   };
 
-  console.log(router.query.unit, props.units);
   return (
     <Drawer
       className={classes.drawer}

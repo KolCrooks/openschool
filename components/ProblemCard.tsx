@@ -37,7 +37,18 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Problem(props: { problem: IProblem }) {
+export function MarkdownRenderer(props: { children: string }) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[RemarkMathPlugin]}
+      rehypePlugins={[rehypeKatex]}
+    >
+      {props.children}
+    </ReactMarkdown>
+  );
+}
+
+export default function ProblemCard(props: { problem: IProblem }) {
   const classes = useStyles();
   const [vote, _setVote] = useState("0");
   const setVote = (v: string) => {
@@ -54,7 +65,9 @@ export default function Problem(props: { problem: IProblem }) {
       <CardContent className={classes.content}>
         <div className={classes.titleHeader}>
           <Tooltip
-            title={`Created: ${props.problem.created.toLocaleDateString()}`}
+            title={`Created: ${new Date(
+              props.problem.created
+            ).toLocaleDateString()}`}
             aria-label="add"
           >
             <Typography variant="h5">Problem</Typography>
@@ -80,12 +93,7 @@ export default function Problem(props: { problem: IProblem }) {
             </Tooltip>
           </div>
         </div>
-        <ReactMarkdown
-          remarkPlugins={[RemarkMathPlugin]}
-          rehypePlugins={[rehypeKatex]}
-        >
-          {props.problem.content}
-        </ReactMarkdown>
+        <MarkdownRenderer>{props.problem.content}</MarkdownRenderer>
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMore />}
@@ -95,12 +103,7 @@ export default function Problem(props: { problem: IProblem }) {
             <Typography>Show Solution</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <ReactMarkdown
-              remarkPlugins={[RemarkMathPlugin]}
-              rehypePlugins={[rehypeKatex]}
-            >
-              {props.problem.solution}
-            </ReactMarkdown>
+            <MarkdownRenderer>{props.problem.solution}</MarkdownRenderer>
           </AccordionDetails>
         </Accordion>
       </CardContent>
