@@ -3,14 +3,24 @@ import { FullCourse, ICourse } from "../../../models/course";
 import { FullUnit, IUnit } from "../../../models/unit";
 import { signIn, useSession } from "next-auth/client";
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles";
-import React, { useState } from "react";
-import { CssBaseline, Typography, Button } from "@material-ui/core";
+import {
+  CssBaseline,
+  Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+} from "@material-ui/core";
 import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
 import Add from "@material-ui/icons/Add";
-import Problem, { MarkdownRenderer } from "../../../components/ProblemCard";
+import React, { useState } from "react";
+import ProblemCard from "../../../components/ProblemCard";
 
-import "react-mde/lib/styles/css/react-mde-all.css";
+//import Video from "../../components/video";
 
 const drawerWidth = 240;
 
@@ -48,6 +58,42 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const [session, loading] = useSession();
   const [openEditor, setOpenEditor] = useState(false);
   const { unit } = props;
+  const [open, setOpen] = useState(false);
+  const [vidOpen, vidSetOpen] = useState(false);
+  const [confirmOpen, confirmSetOpen] = useState(false);
+  var embedLink = "";
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpenVid = () => {
+    vidSetOpen(true);
+  };
+  const handleCloseVid = () => {
+    vidSetOpen(false);
+    console.log(linkText);
+    embedLink = linkText.replace(
+      "https://youtu.be/",
+      "https://www.youtube.com/embed/"
+    );
+    console.log(embedLink);
+  };
+
+  const handleOpenConfirm = () => {
+    confirmSetOpen(true);
+  };
+
+  const handleCloseConfirm = () => {
+    confirmSetOpen(false);
+  };
+
+  const [linkText, setLinkText] = useState("");
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -58,9 +104,43 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
         <div className={classes.videos}>
           <div className={classes.videosHeader}>
             <Typography variant="h4">Videos</Typography>
-            <Button variant="outlined">
-              Add <Add />
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleClickOpenVid}
+            >
+              Add Video
             </Button>
+            <Dialog
+              open={vidOpen}
+              onClose={handleCloseVid}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Add Video</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  To add a video, upload it to YouTube, click share, and copy
+                  the link provided by clicking &quot Copy&quot or highlight and
+                  then copy the link. Paste the link here
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Link goes here"
+                  onChange={(e) => setLinkText(e.target.value)}
+                  fullWidth
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseVid} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleCloseVid} color="primary">
+                  Upload
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
           {unit.videos.length === 0 ? (
             <Typography variant="body1">
@@ -85,7 +165,7 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
             </Button>
           </div>
           {props.unit.problems.map((p) => (
-            <Problem problem={p} key={p._id} />
+            <ProblemCard problem={p} key={p._id} />
           ))}
         </div>
       </main>

@@ -16,6 +16,9 @@ import { TransitionProps } from "@material-ui/core/transitions";
 import React, { useState } from "react";
 import ReactMde from "react-mde";
 import { MarkdownRenderer } from "./ProblemCard";
+
+import "react-mde/lib/styles/css/react-mde-all.css";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {

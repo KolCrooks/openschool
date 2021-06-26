@@ -48,7 +48,7 @@ export function MarkdownRenderer(props: { children: string }) {
   );
 }
 
-export default function Problem(props: { problem: IProblem }) {
+export default function ProblemCard(props: { problem: IProblem }) {
   const classes = useStyles();
   const [vote, _setVote] = useState("0");
   const setVote = (v: string) => {
