@@ -19,6 +19,7 @@ import Header from "../../../components/header";
 import Add from "@material-ui/icons/Add";
 import React, { useState } from "react";
 import ProblemCard from "../../../components/ProblemCard";
+import ProblemCreator from "../../../components/problemCreator";
 
 //import Video from "../../components/video";
 
@@ -63,14 +64,7 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const [confirmOpen, confirmSetOpen] = useState(false);
   var embedLink = "";
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  console.log("hi", props);
   const handleClickOpenVid = () => {
     vidSetOpen(true);
   };
@@ -82,14 +76,6 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
       "https://www.youtube.com/embed/"
     );
     console.log(embedLink);
-  };
-
-  const handleOpenConfirm = () => {
-    confirmSetOpen(true);
-  };
-
-  const handleCloseConfirm = () => {
-    confirmSetOpen(false);
   };
 
   const [linkText, setLinkText] = useState("");
@@ -164,10 +150,19 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
               Add Problem
             </Button>
           </div>
-          {props.unit.problems.map((p) => (
-            <ProblemCard problem={p} key={p._id} />
-          ))}
+          {unit.problems.length === 0 ? (
+            <Typography variant="body1">There are no problems yet</Typography>
+          ) : (
+            props.unit.problems.map((p) => (
+              <ProblemCard problem={p} key={p._id} />
+            ))
+          )}
         </div>
+        <ProblemCreator
+          open={openEditor}
+          unitId={props.unit._id}
+          onClose={() => setOpenEditor(false)}
+        />
       </main>
     </div>
   );

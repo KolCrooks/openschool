@@ -5,6 +5,7 @@ import { IVideo } from "./video";
 const Schema = mongoose.Schema;
 
 export interface IUnit {
+  _id: string;
   name: string;
   course: string;
   videos: string[];
@@ -12,6 +13,7 @@ export interface IUnit {
 }
 
 export interface FullUnit {
+  _id: string;
   name: string;
   course: ICourse;
   videos: IVideo[];

@@ -65,7 +65,9 @@ export default function ProblemCard(props: { problem: IProblem }) {
       <CardContent className={classes.content}>
         <div className={classes.titleHeader}>
           <Tooltip
-            title={`Created: ${props.problem.created.toLocaleDateString()}`}
+            title={`Created: ${new Date(
+              props.problem.created
+            ).toLocaleDateString()}`}
             aria-label="add"
           >
             <Typography variant="h5">Problem</Typography>
@@ -101,7 +103,7 @@ export default function ProblemCard(props: { problem: IProblem }) {
             <Typography>Show Solution</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <ReactMarkdown>{props.problem.solution}</ReactMarkdown>
+            <MarkdownRenderer>{props.problem.solution}</MarkdownRenderer>
           </AccordionDetails>
         </Accordion>
       </CardContent>

@@ -8,7 +8,7 @@ export interface IProblem {
   solution: string;
   unitId: string;
   score: number;
-  created: Date;
+  created: string;
 }
 const problem = new Schema<IProblem>({
   authorId: {

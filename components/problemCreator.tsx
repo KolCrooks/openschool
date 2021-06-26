@@ -9,6 +9,8 @@ import {
   Theme,
   Slide,
   Toolbar,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import FunctionsIcon from "@material-ui/icons/Functions";
@@ -36,6 +38,10 @@ const useStyles = makeStyles((theme: Theme) =>
     MDE: {
       width: "75%",
     },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: "#fff",
+    },
   })
 );
 const Transition = React.forwardRef(function Transition(
@@ -46,7 +52,8 @@ const Transition = React.forwardRef(function Transition(
 });
 export default function ProblemCreator(props: {
   open: boolean;
-  onClose: () => {};
+  unitId: string;
+  onClose: () => unknown;
 }) {
   const classes = useStyles();
   const { open, onClose } = props;
@@ -58,6 +65,9 @@ export default function ProblemCreator(props: {
     "write" | "preview"
   >("write");
   const [problemEditorVal2, setProblemEditorVal2] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
   return (
     <Dialog
       fullWidth
@@ -66,6 +76,9 @@ export default function ProblemCreator(props: {
       open={open}
       TransitionComponent={Transition}
     >
+      <Backdrop className={classes.backdrop} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton
@@ -82,7 +95,22 @@ export default function ProblemCreator(props: {
           <Button
             autoFocus
             color="inherit"
-            onClick={() => {
+            onClick={async () => {
+              setLoading(true);
+              await fetch("/api/problem", {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  content: problemEditorVal,
+                  solution: problemEditorVal2,
+                  unitId: props.unitId,
+                }),
+              });
+              setLoading(false);
+
               onClose();
             }}
           >
