@@ -3,18 +3,17 @@ import { FullCourse, ICourse } from "../../../models/course";
 import { FullUnit, IUnit } from "../../../models/unit";
 import { signIn, useSession } from "next-auth/client";
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles";
-import React from "react";
+import React, { useState } from "react";
 import { CssBaseline, Typography, Button } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
 import Add from "@material-ui/icons/Add";
-import Problem from "../../../components/ProblemCard";
+import Problem, { MarkdownRenderer } from "../../../components/ProblemCard";
+
+import "react-mde/lib/styles/css/react-mde-all.css";
 
 const drawerWidth = 240;
-const mkdn = `Lift($L$) can be determined by Lift Coefficient ($C_L$) like the following equation.
-$$
-L = \\frac{1}{2} \\rho v^2 S C_L
-$$`;
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -47,8 +46,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const classes = useStyles();
   const [session, loading] = useSession();
+  const [openEditor, setOpenEditor] = useState(false);
   const { unit } = props;
-
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -77,23 +76,17 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
             <Button
               variant="outlined"
               onClick={() => {
-                if (!session?.user) signIn("Google");
+                if (!session?.user) return signIn("google");
+                setOpenEditor(true);
               }}
+              color="primary"
             >
-              Add <Add />
+              Add Problem
             </Button>
           </div>
-          <Problem
-            problem={{
-              _id: "abc",
-              authorId: "",
-              content: mkdn,
-              created: new Date(),
-              score: 0,
-              solution: mkdn,
-              unitId: unit.name,
-            }}
-          ></Problem>
+          {props.unit.problems.map((p) => (
+            <Problem problem={p} key={p._id} />
+          ))}
         </div>
       </main>
     </div>
