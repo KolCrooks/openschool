@@ -56,7 +56,7 @@ const gridStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Algebra(props: { course: FullCourse }) {
+export default function Physics(props: { course: FullCourse }) {
   const classes = useStyles();
   const format = gridStyles();
 
@@ -69,10 +69,9 @@ export default function Algebra(props: { course: FullCourse }) {
         <div className={classes.toolbar} />
 
         <Typography paragraph>
-          In this course you will learn the fundementals of Algebra. See the
+          In this course you will learn the fundementals of Physics. See the
           course units listed on the left. After finishing this course you will
-          have the skills necessary to solve a wide variety of algebraic
-          problems.
+          have a greater understanding of the math hidden within reality.
         </Typography>
         <div className={format.root}>
           <Grid container spacing={2}>
@@ -80,7 +79,7 @@ export default function Algebra(props: { course: FullCourse }) {
               <iframe
                 width="800"
                 height="450"
-                src="https://www.youtube.com/embed/NybHckSEQBI"
+                src="https://www.youtube.com/embed/yWMKYID5fr8"
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -89,22 +88,22 @@ export default function Algebra(props: { course: FullCourse }) {
             <Grid item xs>
               <GridList cellHeight={200} className={format.gridList} cols={2}>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/5Q0FlxcEEIw" />
+                  <Video vidLink="https://www.youtube.com/embed/PUZkE1vIvIA" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/w0b7N3n78Ok" />
+                  <Video vidLink="https://www.youtube.com/embed/ZihywtixUYo" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/bTl4PEs7rvg" />
+                  <Video vidLink="https://www.youtube.com/embed/Hu-JL2J6ncE" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/NybHckSEQBI" />
+                  <Video vidLink="https://www.youtube.com/embed/yWMKYID5fr8" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/5Q0FlxcEEIw" />
+                  <Video vidLink="https://www.youtube.com/embed/PUZkE1vIvIA" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/bTl4PEs7rvg" />
+                  <Video vidLink="https://www.youtube.com/embed/ZihywtixUYo" />
                 </GridListTile>
               </GridList>
             </Grid>
@@ -116,7 +115,8 @@ export default function Algebra(props: { course: FullCourse }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch(`http://${process.env.host}/api/course/algebra`);
+  //todo need to fix this
+  const res = await fetch(`http://${process.env.host}/api/course/physics`);
   const course = await res.json();
 
   return { props: { course } };
