@@ -18,6 +18,5 @@ export default async function handler(
       units: await Promise.all(c.units.map((t) => Unit.findById(t))),
     }))
   );
-  console.log(courses, o);
   res.status(200).json(o);
 }
