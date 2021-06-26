@@ -4,20 +4,17 @@ import { FullUnit, IUnit } from "../../../models/unit";
 import { useSession } from "next-auth/client";
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles";
 import React from "react";
-import {
-  CssBaseline,
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-} from "@material-ui/core";
+import { CssBaseline, Typography, Button } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
-import { Edit } from "@material-ui/icons";
 import Add from "@material-ui/icons/Add";
-import { useRemark } from "react-remark";
-const drawerWidth = 240;
+import Problem from "../../../components/ProblemCard";
 
+const drawerWidth = 240;
+const mkdn = `Lift($L$) can be determined by Lift Coefficient ($C_L$) like the following equation.
+$$
+L = \\frac{1}{2} \\rho v^2 S C_L
+$$`;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -47,12 +44,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function Problem(props: { markdown: string }) {
-  const [reactContent, setMarkdownSource] = useRemark();
-  setMarkdownSource(props.markdown);
-  return <div>{reactContent}</div>;
-}
-
 export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const classes = useStyles();
   const [session, loading] = useSession();
@@ -62,7 +53,7 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
     <div className={classes.root}>
       <CssBaseline />
       <Header name={props.unit.name} />
-      <Sidebar courseName={props.course.name} units={props.course.units} />
+      <Sidebar course={props.course} units={props.course.units} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <div className={classes.videos}>
@@ -87,6 +78,17 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
               Add <Add />
             </Button>
           </div>
+          <Problem
+            problem={{
+              _id: "abc",
+              authorId: "",
+              content: mkdn,
+              created: new Date(),
+              score: 0,
+              solution: mkdn,
+              unitId: unit.name,
+            }}
+          ></Problem>
         </div>
       </main>
     </div>

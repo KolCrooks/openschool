@@ -64,7 +64,7 @@ export default function Algebra(props: { course: FullCourse }) {
     <div className={classes.root}>
       <CssBaseline />
       <Header name="Algebra: Introduction" />
-      <Sidebar courseName={props.course.name} units={props.course.units} />
+      <Sidebar course={props.course} units={props.course.units} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
 

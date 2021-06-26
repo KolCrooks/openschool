@@ -13,7 +13,6 @@ export default NextAuth({
   ],
   callbacks: {
     async session(session, token) {
-      console.log(session, token);
       if (!session.user?.email) return session;
 
       let u = await User.findOne({ email: session.user.email });
