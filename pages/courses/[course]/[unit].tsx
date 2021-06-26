@@ -9,6 +9,22 @@ import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
 import Add from "@material-ui/icons/Add";
 import Problem from "../../../components/ProblemCard";
+import Dialog from "@material-ui/core/Dialog";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItem from "@material-ui/core/ListItem";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Slide from "@material-ui/core/Slide";
+import { TransitionProps } from "@material-ui/core/transitions";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import TextField from "@material-ui/core/TextField";
 
 const drawerWidth = 240;
 const mkdn = `Lift($L$) can be determined by Lift Coefficient ($C_L$) like the following equation.
@@ -41,13 +57,36 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "space-between",
       alignItems: "flex-end",
     },
+    appBar: {
+      position: "relative",
+    },
+    title: {
+      marginLeft: theme.spacing(2),
+      flex: 1,
+    },
   })
 );
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & { children?: React.ReactElement },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const classes = useStyles();
   const [session, loading] = useSession();
   const { unit } = props;
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={classes.root}>
@@ -74,9 +113,45 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
         <div className={classes.problems}>
           <div className={classes.problemsHeader}>
             <Typography variant="h4">Problems</Typography>
-            <Button variant="outlined">
-              Add <Add />
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleClickOpen}
+            >
+              Add Problem
             </Button>
+            <Dialog
+              fullScreen
+              open={open}
+              onClose={handleClose}
+              TransitionComponent={Transition}
+            >
+              <AppBar className={classes.appBar}>
+                <Toolbar>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={handleClose}
+                    aria-label="close"
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                  <Typography variant="h6" className={classes.title}>
+                    Problem
+                  </Typography>
+                  <Button autoFocus color="inherit" onClick={handleClose}>
+                    Submit
+                  </Button>
+                </Toolbar>
+              </AppBar>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Type your problem here"
+                multiline
+              />
+            </Dialog>
           </div>
           <Problem
             problem={{
