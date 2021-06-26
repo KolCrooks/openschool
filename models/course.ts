@@ -3,11 +3,13 @@ import { IUnit } from "./unit";
 const Schema = mongoose.Schema;
 
 export interface ICourse {
+  _id: string;
   name: string;
   units: string[];
 }
 
 export interface FullCourse {
+  _id: string;
   name: string;
   units: IUnit[];
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -24,6 +24,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { Backdrop, CircularProgress } from "@material-ui/core";
+import { FullCourse, ICourse } from "../models/course";
+import { useSession } from "next-auth/client";
 
 const drawerWidth = 240;
 const iconLabels = [
@@ -54,21 +57,41 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.default,
       padding: theme.spacing(3),
     },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: "#fff",
+    },
   })
 );
 
-export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
+export default function Sidebar(props: {
+  course: ICourse | FullCourse;
+  units: IUnit[];
+}) {
   const classes = useStyles();
   const router = useRouter();
-  const links = ["/", `/courses/${props.courseName.toLowerCase()}`];
+  const links = ["/", `/courses/${props.course.name.toLowerCase()}`];
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [session] = useSession();
 
+  const [unitText, setUnitText] = useState("");
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleSubmit = async () => {
+    setLoading(true);
+    await fetch("/api/unit/create", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: unitText, courseId: props.course._id }),
+    });
+    setLoading(false);
     setOpen(false);
   };
 
@@ -105,50 +128,58 @@ export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
             alignItems="center"
             selected={
               router.pathname ===
-              `/courses/${props.courseName.toLowerCase()}/${unit.name.toLowerCase()}`
+              `/courses/${props.course.name.toLowerCase()}/${unit.name.toLowerCase()}`
             }
-            href={`/courses/${props.courseName.toLowerCase()}/${unit.name.toLowerCase()}`}
+            href={`/courses/${props.course.name.toLowerCase()}/${unit.name.toLowerCase()}`}
           >
             <ListItemText primary={unit.name} inset />
           </ListItem>
         ))}
-        <div>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleClickOpen}
-            fullWidth
-          >
-            Add a Unit
-          </Button>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">Add a Unit</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                To add a unit to this course please enter the new unit name
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Unit ie. Simultaneous Equations"
-                fullWidth
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={handleClose} color="primary">
-                Submit
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
+        {session?.user.isAdmin ? (
+          <div>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleClickOpen}
+              fullWidth
+            >
+              Add a Unit
+            </Button>
+            <Dialog
+              open={open}
+              onClose={handleSubmit}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Add a Unit</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  To add a unit to this course please enter the new unit name
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Unit ie. Simultaneous Equations"
+                  fullWidth
+                  onChange={(e) => setUnitText(e.target.value)}
+                />
+                <Backdrop className={classes.backdrop} open={loading}>
+                  <CircularProgress color="inherit" />
+                </Backdrop>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setOpen(false)} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleSubmit} color="primary">
+                  Submit
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        ) : (
+          <></>
+        )}
       </List>
     </Drawer>
   );
