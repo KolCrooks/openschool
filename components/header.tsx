@@ -3,8 +3,12 @@ import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import { signIn, signOut, useSession } from "next-auth/client";
+import { Button } from "@material-ui/core";
 
 const drawerWidth = 240;
+
+const [session, loading] = useSession();
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +33,10 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.default,
       padding: theme.spacing(3),
     },
+    signOut: {
+      display: "flex",
+      flexDirection: "column",
+    },
   })
 );
 
@@ -40,6 +48,25 @@ export default function Header(props: { name: String }) {
         <Typography variant="h6" noWrap>
           {props.name}
         </Typography>
+        {!session && (
+          <>
+            <Button color="inherit" onClick={() => signIn()}>
+              Sign in
+            </Button>
+          </>
+        )}
+        {session && (
+          <span className={classes.signOut}>
+            <Button
+              color="inherit"
+              onClick={() => signOut()}
+              variant="outlined"
+            >
+              Sign out
+            </Button>
+            <Typography variant="caption">{session.user?.email}</Typography>
+          </span>
+        )}
       </Toolbar>
     </AppBar>
   );

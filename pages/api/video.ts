@@ -19,9 +19,8 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400).send("");
 
-  const { url, token, unitId } = req.body;
-  if (!url || !matchYoutubeUrl(url) || !token || !unitId)
-    return res.status(400).send("");
+  const { url, unitId } = req.body;
+  if (!url || !matchYoutubeUrl(url) || !unitId) return res.status(400).send("");
 
   const v = new Video({ content: url, authorId: "", unitId });
   await v.save();

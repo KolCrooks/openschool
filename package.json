@@ -16,7 +16,8 @@
     "next": "11.0.1",
     "next-auth": "^3.27.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-remark": "^2.0.3"
   },
   "devDependencies": {
     "@types/mongoose": "^5.11.97",

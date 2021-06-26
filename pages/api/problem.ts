@@ -18,9 +18,8 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400).send("");
 
-  const { content, solution, token, unitId } = req.body;
-  if (!content || !solution || !token || !unitId)
-    return res.status(400).send("");
+  const { content, solution, unitId } = req.body;
+  if (!content || !solution || !unitId) return res.status(400).send("");
 
   const v = new Problem({ content, solution, authorId: "", unitId });
   await v.save();
