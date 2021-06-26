@@ -12,7 +12,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const unit = await Unit.findOne().where({ name: req.query.name });
+  if (!req.query.name) return res.status(400).send("");
+
+  const unit = await Unit.findOne().where({
+    name: { $regex: new RegExp(req.query.name as string, "i") },
+  });
   if (!unit) return res.status(404).send("");
 
   const o = {

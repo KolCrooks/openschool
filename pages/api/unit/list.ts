@@ -23,6 +23,5 @@ export default async function handler(
       problems: u.problems,
     }))
   );
-  console.log(units, o);
   res.status(200).json(o);
 }
