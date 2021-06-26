@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 const Schema = mongoose.Schema;
 
-interface ICourse {
+export interface ICourse {
   name: string;
   units: string[];
 }
@@ -20,7 +20,7 @@ const course = new Schema<ICourse>({
   ],
 });
 
-const Course = mongoose.models.Course
+const Course: mongoose.Model<ICourse, {}, {}> = mongoose.models.Course
   ? mongoose.models.Course
   : mongoose.model<ICourse>("Course", course);
 

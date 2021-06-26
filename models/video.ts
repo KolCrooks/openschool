@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-interface IVideo {
+export interface IVideo {
   authorId: string;
   content: string;
   score: number;
+  unitId: string;
   created: Date;
 }
 
@@ -13,18 +14,23 @@ const video = new Schema<IVideo>({
     type: Schema.Types.ObjectId,
     required: true,
   },
+  unitId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+  },
   content: {
     type: String,
     required: true,
+    unique: true,
   },
-  score: { type: Number },
+  score: { type: Number, default: 0 },
   created: {
     type: Date,
     default: Date.now,
   },
 });
 
-const Video = mongoose.models.Video
+const Video: mongoose.Model<IVideo, {}, {}> = mongoose.models.Video
   ? mongoose.models.video
   : mongoose.model<IVideo>("Video", video);
 

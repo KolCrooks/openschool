@@ -1,11 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+import { ICourse } from "./course";
+import { IProblem } from "./problem";
+import { IVideo } from "./video";
 const Schema = mongoose.Schema;
 
-interface IUnit {
+export interface IUnit {
   name: string;
-  category: string;
+  course: string;
   videos: string[];
   problems: string[];
+}
+
+export interface FullUnit {
+  name: string;
+  course: ICourse;
+  videos: IVideo[];
+  problems: IProblem[];
 }
 
 const unit = new Schema<IUnit>({
@@ -14,7 +24,7 @@ const unit = new Schema<IUnit>({
     required: true,
     unique: true,
   },
-  category: {
+  course: {
     type: Schema.Types.ObjectId,
     required: true,
   },
@@ -32,7 +42,7 @@ const unit = new Schema<IUnit>({
   ],
 });
 
-const Unit = mongoose.models.Unit
+const Unit: mongoose.Model<IUnit, {}, {}> = mongoose.models.Unit
   ? mongoose.models.Unit
   : mongoose.model<IUnit>("Unit", unit);
 

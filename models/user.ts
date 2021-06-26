@@ -30,7 +30,7 @@ const user = new Schema<IUser>({
   },
 });
 
-const User = mongoose.models.User
+const User: mongoose.Model<IUser, {}, {}> = mongoose.models.User
   ? mongoose.models.User
   : mongoose.model<IUser>("User", user);
 
