@@ -1,8 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { FullUnit, IUnit } from "../../models/unit";
+import { FullUnit, IUnit } from "../../../models/unit";
 
 export default function Unit(props: { unit: FullUnit }) {
-  return <div></div>;
+  const { unit } = props;
+  return <div>{unit.name}</div>;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {

@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import "../../models";
 import Course from "../../models/course";
+import Unit from "../../models/unit";
 import Video from "../../models/video";
 
 function matchYoutubeUrl(url: string) {
@@ -19,11 +20,10 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400).send("");
 
-  const { url, token, unitId } = req.body;
-  if (!url || !matchYoutubeUrl(url) || !token || !unitId)
-    return res.status(400).send("");
+  const { unit } = req.body;
+  if (!unit) return res.status(400).send("");
 
-  const v = new Video({ content: url, authorId: "", unitId });
+  const v = Unit.create({course: });
   await v.save();
 
   res.status(200).send("");

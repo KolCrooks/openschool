@@ -3,8 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import "../../models";
 import Problem from "../../models/problem";
 
-console.log("hi", process.env.mongodb);
-
 function matchYoutubeUrl(url: string) {
   var p =
     /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
