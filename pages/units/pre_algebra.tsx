@@ -22,7 +22,7 @@ const iconLabels = [
   <MultilineChartIcon />,
 ];
 
-const links = ["/", "/units/pre_algebra"];
+const links = ["/", "https://www.google.com"];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,7 +59,7 @@ export default function PermanentDrawerLeft() {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            Algebra
+            Pre-Algebra
           </Typography>
         </Toolbar>
       </AppBar>
@@ -87,7 +87,9 @@ export default function PermanentDrawerLeft() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
 
-        <Typography paragraph>Here you will learn about algebra.</Typography>
+        <Typography paragraph>
+          Here you will learn about pre-algebra.
+        </Typography>
         <iframe
           width="800"
           height="450"
