@@ -8,8 +8,6 @@ import { Button } from "@material-ui/core";
 
 const drawerWidth = 240;
 
-const [session, loading] = useSession();
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -41,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function Header(props: { name: String }) {
+  const [session, loading] = useSession();
   const classes = useStyles();
   return (
     <AppBar position="fixed" className={classes.appBar}>

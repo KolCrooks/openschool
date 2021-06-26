@@ -85,7 +85,7 @@ export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
       <div className={classes.toolbar} />
 
       <List>
-        {["Main Page", "0. Introduction"].map((text, index) => (
+        {["Main Page", "Introduction"].map((text, index) => (
           <ListItem
             button
             key={text}

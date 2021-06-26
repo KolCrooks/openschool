@@ -21,6 +21,11 @@ export default function Home() {
 
         <p className={styles.description}>
           Start your academic adventure with just one click
+          <br></br>
+          Open School is a crowd sourced educational website. Many teachers have
+          created videos and material to cater online class during the pandemic.
+          Now they can upload this content within our course and units framework
+          to provide high quality education to any student with internet access.
         </p>
 
         <div className={styles.grid}>
@@ -48,12 +53,6 @@ export default function Home() {
             </a>
           </Grow>
         </div>
-        <p>
-          Open School is a crowd sourced educational website. Many teachers have
-          created videos and material to cater online class during the pandemic.
-          Now they can upload this content within our course and units framework
-          to provide high quality education to any student with internet access.
-        </p>
       </main>
     </div>
   );
