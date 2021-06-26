@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-interface IUser {
+export interface IUser {
   display_name: string;
   email: string;
   posts: string[];
+  isAdmin: boolean;
   since: Date;
 }
 const user = new Schema<IUser>({

@@ -19,7 +19,7 @@ import {
 } from "@material-ui/core";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import { ArrowDownward, ArrowUpward, ExpandMore } from "@material-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useLocalStorage from "react-use-localstorage";
 
 const useStyles = makeStyles({
@@ -39,7 +39,15 @@ const useStyles = makeStyles({
 
 export default function Problem(props: { problem: IProblem }) {
   const classes = useStyles();
-  const [vote, setVote] = useState("0");
+  const [vote, _setVote] = useState("0");
+  const setVote = (v: string) => {
+    window.localStorage.setItem(props.problem._id, v);
+    _setVote(v);
+  };
+  useEffect(() => {
+    const cnt = window.localStorage.getItem(props.problem._id) || "0";
+    _setVote(cnt);
+  });
 
   return (
     <Card className={classes.root}>

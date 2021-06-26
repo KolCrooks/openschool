@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -77,6 +77,7 @@ export default function Sidebar(props: {
   const [session] = useSession();
 
   const [unitText, setUnitText] = useState("");
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -95,7 +96,7 @@ export default function Sidebar(props: {
     setOpen(false);
   };
 
-  console.log(router.pathname);
+  console.log(router.query.unit, props.units);
   return (
     <Drawer
       className={classes.drawer}
@@ -126,16 +127,13 @@ export default function Sidebar(props: {
             key={index}
             component="a"
             alignItems="center"
-            selected={
-              router.pathname ===
-              `/courses/${props.course.name.toLowerCase()}/${unit.name.toLowerCase()}`
-            }
+            selected={router.query.unit === unit.name.toLowerCase()}
             href={`/courses/${props.course.name.toLowerCase()}/${unit.name.toLowerCase()}`}
           >
             <ListItemText primary={unit.name} inset />
           </ListItem>
         ))}
-        {session?.user.isAdmin ? (
+        {session?.user?.isAdmin ? (
           <div>
             <Button
               variant="outlined"

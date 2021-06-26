@@ -24,7 +24,6 @@ const course = new Schema<ICourse>({
     {
       type: Schema.Types.ObjectId,
       default: [],
-      unique: true,
     },
   ],
 });
@@ -32,5 +31,5 @@ const course = new Schema<ICourse>({
 const Course: mongoose.Model<ICourse, {}, {}> = mongoose.models.Course
   ? mongoose.models.Course
   : mongoose.model<ICourse>("Course", course);
-
+Course.ensureIndexes();
 export default Course;
