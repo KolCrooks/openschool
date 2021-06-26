@@ -15,6 +15,7 @@ import DehazeIcon from "@material-ui/icons/Dehaze";
 import MultilineChartIcon from "@material-ui/icons/MultilineChart";
 import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite";
 import Sidebar from "../../components/sidebar";
+import Header from "../../components/header";
 import { GetStaticProps } from "next";
 import { FullCourse } from "../../models/course";
 
@@ -52,13 +53,7 @@ export default function Algebra(props: { course: FullCourse }) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Algebra
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Header name="test" />
       <Sidebar courseName={props.course.name} units={props.course.units} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
