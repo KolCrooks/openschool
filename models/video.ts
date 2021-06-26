@@ -1,7 +1,14 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const video = new Schema({
+interface IVideo {
+  authorId: string;
+  content: string;
+  score: number;
+  created: Date;
+}
+
+const video = new Schema<IVideo>({
   authorId: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -17,6 +24,6 @@ const video = new Schema({
   },
 });
 
-const Video = mongoose.model("Video", video);
+const Video = mongoose.model<IVideo>("Video", video);
 
 export default Video;

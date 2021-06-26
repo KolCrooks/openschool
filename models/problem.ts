@@ -1,27 +1,33 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const problem = new Schema({
+interface IProblem {
+  authorId: string;
+  content: string;
+  solution: string;
+  score: number;
+  created: Date;
+}
+const problem = new Schema<IProblem>({
   authorId: {
     type: Schema.Types.ObjectId,
-    required: true
+    required: true,
   },
   content: {
-      type: String,
-      required: true
+    type: String,
+    required: true,
   },
   solution: {
     type: String,
-    required: true
+    required: true,
   },
-  score: {type: Number},
+  score: { type: Number },
   created: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-
-const Problem = mongoose.model('Problem', problem);
+const Problem = mongoose.model<IProblem>("Problem", problem);
 
 export default Problem;

@@ -1,10 +1,16 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const course = new Schema({
+interface ICourse {
+  name: string;
+  topics: string;
+}
+
+const course = new Schema<ICourse>({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   topics: [
     {
@@ -14,6 +20,6 @@ const course = new Schema({
   ],
 });
 
-const Course = mongoose.model("Course", course);
+const Course = mongoose.model<ICourse>("Course", course);
 
 export default Course;

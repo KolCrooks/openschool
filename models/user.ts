@@ -1,14 +1,22 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const user = new Schema({
+interface IUser {
+  display_name: string;
+  email: string;
+  posts: string[];
+  since: Date;
+}
+const user = new Schema<IUser>({
   display_name: {
     type: String,
     required: true,
+    unique: true,
   },
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   posts: [
     {
@@ -22,6 +30,6 @@ const user = new Schema({
   },
 });
 
-const User = mongoose.model("User", user);
+const User = mongoose.model<IUser>("User", user);
 
 export default User;
