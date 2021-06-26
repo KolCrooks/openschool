@@ -3,7 +3,7 @@ import { FullCourse, ICourse } from "../../../models/course";
 import { FullUnit, IUnit } from "../../../models/unit";
 import { useSession } from "next-auth/client";
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles";
-import React from "react";
+
 import { CssBaseline, Typography, Button } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
@@ -25,6 +25,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import React, { useEffect, useState } from "react";
+//import Video from "../../components/video";
 
 const drawerWidth = 240;
 const mkdn = `Lift($L$) can be determined by Lift Coefficient ($C_L$) like the following equation.
@@ -78,7 +80,10 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const classes = useStyles();
   const [session, loading] = useSession();
   const { unit } = props;
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [vidOpen, vidSetOpen] = useState(false);
+  const [confirmOpen, confirmSetOpen] = useState(false);
+  var embedLink = "";
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,6 +92,29 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleClickOpenVid = () => {
+    vidSetOpen(true);
+  };
+  const handleCloseVid = () => {
+    vidSetOpen(false);
+    console.log(linkText);
+    embedLink = linkText.replace(
+      "https://youtu.be/",
+      "https://www.youtube.com/embed/"
+    );
+    console.log(embedLink);
+  };
+
+  const handleOpenConfirm = () => {
+    confirmSetOpen(true);
+  };
+
+  const handleCloseConfirm = () => {
+    confirmSetOpen(false);
+  };
+
+  const [linkText, setLinkText] = useState("");
 
   return (
     <div className={classes.root}>
@@ -98,9 +126,43 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
         <div className={classes.videos}>
           <div className={classes.videosHeader}>
             <Typography variant="h4">Videos</Typography>
-            <Button variant="outlined">
-              Add <Add />
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleClickOpenVid}
+            >
+              Add Video
             </Button>
+            <Dialog
+              open={vidOpen}
+              onClose={handleCloseVid}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Add Video</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  To add a video, upload it to YouTube, click share, and copy
+                  the link provided by clicking "Copy" or highlight and then
+                  copy the link. Paste the link here
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Link goes here"
+                  onChange={(e) => setLinkText(e.target.value)}
+                  fullWidth
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseVid} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleCloseVid} color="primary">
+                  Upload
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
           {unit.videos.length === 0 ? (
             <Typography variant="body1">
