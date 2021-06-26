@@ -26,7 +26,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import React, { useEffect, useState } from "react";
-//import Video from "../../components/video";
+import Video from "../../../components/video";
 
 const drawerWidth = 240;
 const mkdn = `Lift($L$) can be determined by Lift Coefficient ($C_L$) like the following equation.
@@ -104,6 +104,7 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
       "https://www.youtube.com/embed/"
     );
     console.log(embedLink);
+    handleOpenConfirm();
   };
 
   const handleOpenConfirm = () => {
@@ -161,6 +162,34 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
                 <Button onClick={handleCloseVid} color="primary">
                   Upload
                 </Button>
+                {/* <Dialog
+                  open={confirmOpen}
+                  onClose={handleCloseConfirm}
+                  aria-labelledby="form-dialog-title"
+                >
+                  <DialogContent>
+                    <DialogContentText>
+                      Confirm this is the vide you want
+                    </DialogContentText>
+                    <Video vidLink={embedLink} />
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Link goes here"
+                      onChange={(e) => setLinkText(e.target.value)}
+                      fullWidth
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseVid} color="primary">
+                      Cancel
+                    </Button>
+                    <Button onClick={handleCloseVid} color="primary">
+                      Upload
+                    </Button>
+                  </DialogActions>
+                </Dialog> */}
               </DialogActions>
             </Dialog>
           </div>
