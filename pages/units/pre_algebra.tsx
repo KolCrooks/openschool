@@ -13,16 +13,10 @@ import ChromeReaderModeIcon from "@material-ui/icons/ChromeReaderMode";
 import AddIcon from "@material-ui/icons/Add";
 import DehazeIcon from "@material-ui/icons/Dehaze";
 import MultilineChartIcon from "@material-ui/icons/MultilineChart";
+import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite";
+import Sidebar from "../../components/sidebar";
 
 const drawerWidth = 240;
-const iconLabels = [
-  <ChromeReaderModeIcon />,
-  <AddIcon />,
-  <DehazeIcon />,
-  <MultilineChartIcon />,
-];
-
-const links = ["/", "https://www.google.com"];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,31 +53,11 @@ export default function PermanentDrawerLeft() {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            Pre-Algebra
+            1. Pre-Algebra
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-        anchor="left"
-      >
-        <div className={classes.toolbar} />
-
-        <List>
-          {["Main Page", "Pre-Algebra", "Linear Equations", "Graphing"].map(
-            (text, index) => (
-              <ListItem button key={text} component="a" href={links[index]}>
-                <ListItemIcon>{iconLabels[index]}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            )
-          )}
-        </List>
-      </Drawer>
+      <Sidebar />
       <main className={classes.content}>
         <div className={classes.toolbar} />
 

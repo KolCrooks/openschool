@@ -14,9 +14,19 @@ import AddIcon from "@material-ui/icons/Add";
 import DehazeIcon from "@material-ui/icons/Dehaze";
 import MultilineChartIcon from "@material-ui/icons/MultilineChart";
 import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite";
-import Sidebar from "../../components/sidebar";
+import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 
 const drawerWidth = 240;
+const iconLabels = [
+  <ChromeReaderModeIcon />,
+  <PlayCircleFilledWhiteIcon />,
+  <AddIcon />,
+  <DehazeIcon />,
+  <MultilineChartIcon />,
+  <KeyboardArrowRightIcon />,
+];
+
+const links = ["/", "/courses/algebra", "/units/pre_algebra"];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,33 +54,35 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function PermanentDrawerLeft() {
+export default function Sidebar() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Algebra
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Sidebar />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+    <Drawer
+      className={classes.drawer}
+      variant="permanent"
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+      anchor="left"
+    >
+      <div className={classes.toolbar} />
 
-        <Typography paragraph>Here you will learn about algebra.</Typography>
-        <iframe
-          width="800"
-          height="450"
-          src="https://www.youtube.com/embed/NybHckSEQBI"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </main>
-    </div>
+      <List>
+        {[
+          "Main Page",
+          "0. Introduction",
+          "1. Pre-Algebra",
+          "2. Linear Equations",
+          "3. Graphing",
+          "4. Inequalities",
+        ].map((text, index) => (
+          <ListItem button key={text} component="a" href={links[index]}>
+            <ListItemIcon>{iconLabels[index]}</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
   );
 }
