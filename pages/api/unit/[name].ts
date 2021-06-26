@@ -26,6 +26,6 @@ export default async function handler(
     videos: await Promise.all(unit.videos.map((v) => Video.findById(v))),
     problems: await Promise.all(unit.problems.map((p) => Problem.findById(p))),
   };
-
+  console.log(unit);
   res.status(200).json(o);
 }
