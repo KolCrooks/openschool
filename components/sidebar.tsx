@@ -54,7 +54,7 @@ export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
   const classes = useStyles();
   const router = useRouter();
   const links = ["/", `/courses/${props.courseName.toLowerCase()}`];
-  console.log(router.pathname);
+
   return (
     <Drawer
       className={classes.drawer}

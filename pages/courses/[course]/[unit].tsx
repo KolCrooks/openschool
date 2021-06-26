@@ -4,27 +4,24 @@ import { FullUnit, IUnit } from "../../../models/unit";
 import { useSession } from "next-auth/client";
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles";
 import React from "react";
-import { CssBaseline, AppBar, Toolbar, Typography } from "@material-ui/core";
+import {
+  CssBaseline,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+} from "@material-ui/core";
 import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
-
+import { Edit } from "@material-ui/icons";
+import Add from "@material-ui/icons/Add";
+import { useRemark } from "react-remark";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
-    },
-    appBar: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-    drawerPaper: {
-      width: drawerWidth,
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
@@ -33,15 +30,34 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.default,
       padding: theme.spacing(3),
     },
+    videos: {},
+    videosHeader: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "flex-end",
+    },
+    problems: {},
+    problemsHeader: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "flex-end",
+    },
   })
 );
+
+function Problem(props: { markdown: string }) {
+  const [reactContent, setMarkdownSource] = useRemark();
+  setMarkdownSource(props.markdown);
+  return <div>{reactContent}</div>;
+}
 
 export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   const classes = useStyles();
   const [session, loading] = useSession();
   const { unit } = props;
 
-  console.log(session, loading);
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -49,16 +65,29 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
       <Sidebar courseName={props.course.name} units={props.course.units} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-
-        <Typography paragraph>Here you will learn about algebra.</Typography>
-        <iframe
-          width="800"
-          height="450"
-          src="https://www.youtube.com/embed/NybHckSEQBI"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <div className={classes.videos}>
+          <div className={classes.videosHeader}>
+            <Typography variant="h4">Videos</Typography>
+            <Button variant="outlined">
+              Add <Add />
+            </Button>
+          </div>
+          {unit.videos.length === 0 ? (
+            <Typography variant="body1">
+              There is no video content yet
+            </Typography>
+          ) : (
+            ""
+          )}
+        </div>
+        <div className={classes.problems}>
+          <div className={classes.problemsHeader}>
+            <Typography variant="h4">Problems</Typography>
+            <Button variant="outlined">
+              Add <Add />
+            </Button>
+          </div>
+        </div>
       </main>
     </div>
   );

@@ -4,6 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { signIn, signOut, useSession } from "next-auth/client";
+import { Button } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -18,6 +19,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
+    },
+    signOut: {
+      display: "flex",
+      flexDirection: "column",
     },
   })
 );
@@ -35,14 +40,22 @@ export default function Header(props: { name: String }) {
         </Typography>
         {!session && (
           <>
-            <button onClick={() => signIn()}>Sign in</button>
+            <Button color="inherit" onClick={() => signIn()}>
+              Sign in
+            </Button>
           </>
         )}
         {session && (
-          <>
-            Signed in as {session.user.email} <br />
-            <button onClick={() => signOut()}>Sign out</button>
-          </>
+          <span className={classes.signOut}>
+            <Button
+              color="inherit"
+              onClick={() => signOut()}
+              variant="outlined"
+            >
+              Sign out
+            </Button>
+            <Typography variant="caption">{session.user.email}</Typography>
+          </span>
         )}
       </Toolbar>
     </AppBar>
