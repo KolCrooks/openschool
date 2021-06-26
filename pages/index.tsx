@@ -1,10 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import { makeStyles } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
+import Paper from "@material-ui/core/Paper";
+import Grow from "@material-ui/core/Grow";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 export default function Home() {
   return (
@@ -23,29 +24,37 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Algebra &rarr;</h2>
-            <p>A broad area of mathematics with many applications</p>
-          </a>
+          <Grow in={true}>
+            <a href="/courses/algebra" className={styles.card}>
+              <h2>Algebra &rarr;</h2>
+              <p>A broad area of mathematics with many applications</p>
+            </a>
+          </Grow>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Biology &rarr;</h2>
-            <p>The study of life</p>
-          </a>
+          <Grow in={true}>
+            <a href="https://nextjs.org/learn" className={styles.card}>
+              <h2>Biology &rarr;</h2>
+              <p>The study of life and its unifying themes</p>
+            </a>
+          </Grow>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h2>Physics &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+          <Grow in={true}>
+            <a
+              href="https://github.com/vercel/next.js/tree/master/examples"
+              className={styles.card}
+            >
+              <h2>Physics &rarr;</h2>
+              <p>Discover the rules of the universe and explore</p>
+            </a>
+          </Grow>
         </div>
+        <p>
+          Open School is a crowd sourced educational website. Many teachers have
+          created videos and material to cater online class during the pandemic.
+          Now they can upload this content within our course and units framework
+          to provide high quality education to any student with internet access.
+        </p>
       </main>
-
-      <footer className={styles.footer}>
-        <p>footer</p>
-      </footer>
     </div>
   );
 }
