@@ -37,17 +37,14 @@ export default function Home() {
           </Grow>
 
           <Grow in={true}>
-            <a href="https://nextjs.org/learn" className={styles.card}>
+            <a href="/courses/biology" className={styles.card}>
               <h2>Biology &rarr;</h2>
               <p>The study of life and its unifying themes</p>
             </a>
           </Grow>
 
           <Grow in={true}>
-            <a
-              href="https://github.com/vercel/next.js/tree/master/examples"
-              className={styles.card}
-            >
+            <a href="/courses/physics" className={styles.card}>
               <h2>Physics &rarr;</h2>
               <p>Discover the rules of the universe and explore</p>
             </a>

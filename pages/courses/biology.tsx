@@ -56,23 +56,22 @@ const gridStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Algebra(props: { course: FullCourse }) {
+export default function Biology(props: { course: FullCourse }) {
   const classes = useStyles();
   const format = gridStyles();
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header name="Algebra: Introduction" />
-      <Sidebar course={props.course} units={props.course.units} />
+      <Header name="Biology: Introduction" />
+      <Sidebar courseName={props.course.name} units={props.course.units} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
 
         <Typography paragraph>
-          In this course you will learn the fundementals of Algebra. See the
+          In this course you will learn the fundementals of Biology. See the
           course units listed on the left. After finishing this course you will
-          have the skills necessary to solve a wide variety of algebraic
-          problems.
+          have a strong understanding of life and biological processes.
         </Typography>
         <div className={format.root}>
           <Grid container spacing={2}>
@@ -80,7 +79,7 @@ export default function Algebra(props: { course: FullCourse }) {
               <iframe
                 width="800"
                 height="450"
-                src="https://www.youtube.com/embed/NybHckSEQBI"
+                src="https://www.youtube.com/embed/3w1fY67dnFI"
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -89,22 +88,22 @@ export default function Algebra(props: { course: FullCourse }) {
             <Grid item xs>
               <GridList cellHeight={200} className={format.gridList} cols={2}>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/5Q0FlxcEEIw" />
+                  <Video vidLink="https://www.youtube.com/embed/6v8djXa-IPQ" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/w0b7N3n78Ok" />
+                  <Video vidLink="https://www.youtube.com/embed/7nKKoxnmTEA" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/bTl4PEs7rvg" />
+                  <Video vidLink="https://www.youtube.com/embed/DTnCqBUnaRM" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/NybHckSEQBI" />
+                  <Video vidLink="https://www.youtube.com/embed/6v8djXa-IPQ" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/5Q0FlxcEEIw" />
+                  <Video vidLink="https://www.youtube.com/embed/7nKKoxnmTEA" />
                 </GridListTile>
                 <GridListTile>
-                  <Video vidLink="https://www.youtube.com/embed/bTl4PEs7rvg" />
+                  <Video vidLink="https://www.youtube.com/embed/3w1fY67dnFI" />
                 </GridListTile>
               </GridList>
             </Grid>
@@ -116,7 +115,7 @@ export default function Algebra(props: { course: FullCourse }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch(`http://${process.env.host}/api/course/algebra`);
+  const res = await fetch(`http://${process.env.host}/api/course/biology`);
   const course = await res.json();
 
   return { props: { course } };
