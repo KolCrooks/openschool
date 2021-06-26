@@ -17,6 +17,13 @@ import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite"
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import { IUnit } from "../models/unit";
 import { useRouter } from "next/dist/client/router";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const drawerWidth = 240;
 const iconLabels = [
@@ -54,6 +61,17 @@ export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
   const classes = useStyles();
   const router = useRouter();
   const links = ["/", `/courses/${props.courseName.toLowerCase()}`];
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   console.log(router.pathname);
   return (
     <Drawer
@@ -84,15 +102,53 @@ export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
             button
             key={index}
             component="a"
+            alignItems="center"
             selected={
               router.pathname ===
               `/courses/${props.courseName.toLowerCase()}/${unit.name.toLowerCase()}`
             }
             href={`/courses/${props.courseName.toLowerCase()}/${unit.name.toLowerCase()}`}
           >
-            <ListItemText primary={unit.name} />
+            <ListItemText primary={unit.name} inset />
           </ListItem>
         ))}
+        <div>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleClickOpen}
+            fullWidth
+          >
+            Add a Unit
+          </Button>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">Add a Unit</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                To add a unit to this course please enter the new unit name
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Unit ie. Simultaneous Equations"
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleClose} color="primary">
+                Submit
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
       </List>
     </Drawer>
   );

@@ -53,12 +53,14 @@ export default function Algebra(props: { course: FullCourse }) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header name="test" />
+      <Header name="Algebra: Introduction" />
       <Sidebar courseName={props.course.name} units={props.course.units} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
 
-        <Typography paragraph>Here you will learn about algebra.</Typography>
+        <Typography paragraph>
+          Here you will learn about {props.course.name}.
+        </Typography>
         <iframe
           width="800"
           height="450"
