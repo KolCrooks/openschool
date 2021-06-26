@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { FullCourse, ICourse } from "../../../models/course";
 import { FullUnit, IUnit } from "../../../models/unit";
-import { useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/client";
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles";
 import React from "react";
 import { CssBaseline, Typography, Button } from "@material-ui/core";
@@ -74,7 +74,12 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
         <div className={classes.problems}>
           <div className={classes.problemsHeader}>
             <Typography variant="h4">Problems</Typography>
-            <Button variant="outlined">
+            <Button
+              variant="outlined"
+              onClick={() => {
+                if (!session?.user) signIn("Google");
+              }}
+            >
               Add <Add />
             </Button>
           </div>
