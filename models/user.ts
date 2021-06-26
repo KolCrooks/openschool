@@ -24,6 +24,10 @@ const user = new Schema<IUser>({
       default: [],
     },
   ],
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   since: {
     type: Date,
     default: Date.now,

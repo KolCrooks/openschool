@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import "../../models";
-import Course, { ICourse } from "../../models/course";
-import Unit from "../../models/unit";
+import "../../../models";
+import Course, { ICourse } from "../../../models/course";
+import Unit from "../../../models/unit";
 
 type Data = {};
 
@@ -15,7 +15,7 @@ export default async function handler(
     courses.map(async (c) => ({
       _id: c._id,
       name: c.name,
-      units: await Promise.all(c.units.map((t) => Unit.findById(t))),
+      units: c.units,
     }))
   );
   res.status(200).json(o);

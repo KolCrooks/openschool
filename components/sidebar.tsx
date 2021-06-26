@@ -15,18 +15,15 @@ import DehazeIcon from "@material-ui/icons/Dehaze";
 import MultilineChartIcon from "@material-ui/icons/MultilineChart";
 import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
+import { IUnit } from "../models/unit";
 
 const drawerWidth = 240;
 const iconLabels = [
-  <ChromeReaderModeIcon />,
-  <PlayCircleFilledWhiteIcon />,
-  <AddIcon />,
-  <DehazeIcon />,
-  <MultilineChartIcon />,
-  <KeyboardArrowRightIcon />,
+  <ChromeReaderModeIcon key={0} />,
+  <PlayCircleFilledWhiteIcon key={1} />,
 ];
 
-const links = ["/", "/courses/algebra", "/units/pre_algebra"];
+const links = ["/", "/courses/algebra"];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,9 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Sidebar() {
+export default function Sidebar(props: { courseName: string; units: IUnit[] }) {
   const classes = useStyles();
-
+  console.log(props);
   return (
     <Drawer
       className={classes.drawer}
@@ -69,17 +66,20 @@ export default function Sidebar() {
       <div className={classes.toolbar} />
 
       <List>
-        {[
-          "Main Page",
-          "0. Introduction",
-          "1. Pre-Algebra",
-          "2. Linear Equations",
-          "3. Graphing",
-          "4. Inequalities",
-        ].map((text, index) => (
+        {["Main Page", "0. Introduction"].map((text, index) => (
           <ListItem button key={text} component="a" href={links[index]}>
             <ListItemIcon>{iconLabels[index]}</ListItemIcon>
             <ListItemText primary={text} />
+          </ListItem>
+        ))}
+        {props.units.map((unit, index) => (
+          <ListItem
+            button
+            key={index}
+            component="a"
+            href={`/courses/${props.courseName.toLowerCase()}/${unit.name.toLowerCase()}`}
+          >
+            <ListItemText primary={unit.name} />
           </ListItem>
         ))}
       </List>

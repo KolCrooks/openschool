@@ -15,6 +15,8 @@ import DehazeIcon from "@material-ui/icons/Dehaze";
 import MultilineChartIcon from "@material-ui/icons/MultilineChart";
 import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite";
 import Sidebar from "../../components/sidebar";
+import { GetStaticProps } from "next";
+import { FullCourse } from "../../models/course";
 
 const drawerWidth = 240;
 
@@ -44,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function PermanentDrawerLeft() {
+export default function Algebra(props: { course: FullCourse }) {
   const classes = useStyles();
 
   return (
@@ -57,7 +59,7 @@ export default function PermanentDrawerLeft() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Sidebar />
+      <Sidebar courseName={props.course.name} units={props.course.units} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
 
@@ -74,3 +76,10 @@ export default function PermanentDrawerLeft() {
     </div>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  const res = await fetch(`http://${process.env.host}/api/course/algebra`);
+  const course = await res.json();
+
+  return { props: { course } };
+};

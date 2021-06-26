@@ -1,9 +1,15 @@
 import mongoose, { Document } from "mongoose";
+import { IUnit } from "./unit";
 const Schema = mongoose.Schema;
 
 export interface ICourse {
   name: string;
   units: string[];
+}
+
+export interface FullCourse {
+  name: string;
+  units: IUnit[];
 }
 
 const course = new Schema<ICourse>({
@@ -16,6 +22,7 @@ const course = new Schema<ICourse>({
     {
       type: Schema.Types.ObjectId,
       default: [],
+      unique: true,
     },
   ],
 });
