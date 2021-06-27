@@ -5,12 +5,11 @@ import Typography from "@material-ui/core/Typography";
 import Sidebar from "../../components/sidebar";
 import Header from "../../components/header";
 import { GetStaticProps } from "next";
-import Course, { FullCourse } from "../../models/course";
+import { FullCourse } from "../../models/course";
 import Grid from "@material-ui/core/Grid";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import Video from "../../components/video";
-import Unit from "../../models/unit";
 
 const drawerWidth = 240;
 
@@ -117,16 +116,8 @@ export default function Algebra(props: { course: FullCourse }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const course = await Course.findOne().where({
-    name: { $regex: new RegExp("algebra", "i") },
-  });
-  if (!course) throw new Error("something");
+  const res = await fetch(`http://${process.env.host}/api/course/algebra`);
+  const course = await res.json();
 
-  const c = {
-    _id: course?.id,
-    name: course.name,
-    units: await Promise.all(course.units.map((p) => Unit.findById(p))),
-  };
-
-  return { props: { course: c } };
+  return { props: { course } };
 };
