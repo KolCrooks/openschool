@@ -85,7 +85,7 @@ export default function ProblemCard(props: { problem: IProblem }) {
                         Accept: "application/json",
                         "Content-Type": "application/json",
                       },
-                      body: JSON.stringify({ vote: -1 }),
+                      body: JSON.stringify({ vote: -1, id: props.problem._id }),
                     });
                     setVote("0");
                   } else {
@@ -95,7 +95,7 @@ export default function ProblemCard(props: { problem: IProblem }) {
                         Accept: "application/json",
                         "Content-Type": "application/json",
                       },
-                      body: JSON.stringify({ vote: 1 }),
+                      body: JSON.stringify({ vote: 1, id: props.problem._id }),
                     });
                     setVote("1");
                   }
@@ -117,7 +117,7 @@ export default function ProblemCard(props: { problem: IProblem }) {
                       Accept: "application/json",
                       "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ vote: 1 }),
+                    body: JSON.stringify({ vote: 1, id: props.problem._id }),
                   });
                   setVote("0");
                 } else {
@@ -127,7 +127,7 @@ export default function ProblemCard(props: { problem: IProblem }) {
                       Accept: "application/json",
                       "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ vote: -1 }),
+                    body: JSON.stringify({ vote: -1, id: props.problem._id }),
                   });
                   setVote("-1");
                 }
