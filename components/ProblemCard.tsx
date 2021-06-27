@@ -51,6 +51,7 @@ export function MarkdownRenderer(props: { children: string }) {
 export default function ProblemCard(props: { problem: IProblem }) {
   const classes = useStyles();
   const [vote, _setVote] = useState("0");
+  const [offset, setOffset] = useState(0);
   const setVote = (v: string) => {
     window.localStorage.setItem(props.problem._id, v);
     _setVote(v);
@@ -58,6 +59,7 @@ export default function ProblemCard(props: { problem: IProblem }) {
   useEffect(() => {
     const cnt = window.localStorage.getItem(props.problem._id) || "0";
     _setVote(cnt);
+    setOffset(-cnt);
   });
 
   return (
@@ -75,19 +77,60 @@ export default function ProblemCard(props: { problem: IProblem }) {
           <div>
             <Tooltip title="Upvote">
               <IconButton
-                onClick={() => (vote === "1" ? setVote("0") : setVote("1"))}
+                onClick={() => {
+                  if (vote === "1") {
+                    fetch("/api/vote/problem", {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ vote: -1 }),
+                    });
+                    setVote("0");
+                  } else {
+                    fetch("/api/vote/problem", {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ vote: 1 }),
+                    });
+                    setVote("1");
+                  }
+                }}
               >
                 <ArrowUpward color={vote === "1" ? "primary" : undefined} />
               </IconButton>
             </Tooltip>
             <Typography variant="button">
-              {props.problem.score + +vote}
+              {props.problem.score + +vote + offset}
             </Typography>
             <Tooltip
               title="Downvote"
               onClick={() => {
-                // if(vote === "-1")
-                // } ? setVote("0") : setVote("-1");
+                if (vote === "-1") {
+                  fetch("/api/vote/problem", {
+                    method: "POST",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ vote: 1 }),
+                  });
+                  setVote("0");
+                } else {
+                  fetch("/api/vote/problem", {
+                    method: "POST",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ vote: -1 }),
+                  });
+                  setVote("-1");
+                }
               }}
             >
               <IconButton>

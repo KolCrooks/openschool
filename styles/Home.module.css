@@ -7,7 +7,10 @@
   align-items: center;
   height: 100vh;
 }
-
+.logo {
+  height: 10rem;
+  width: 10rem;
+}
 .main {
   padding: 5rem 0;
   flex: 1;
@@ -15,22 +18,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
 .footer {
   width: 100%;
-  height: 100px;
+  height: min-content;
   border-top: 1px solid #eaeaea;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
+  text-align: center;
+  margin-top: auto;
 }
 
 .title a {
@@ -106,11 +105,6 @@
   margin: 0;
   font-size: 1.25rem;
   line-height: 1.5;
-}
-
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
 }
 
 @media (max-width: 600px) {

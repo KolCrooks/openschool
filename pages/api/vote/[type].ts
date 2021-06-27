@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
-import Unit from "../../models/unit";
-import Video from "../../models/video";
+import Problem from "../../../models/problem";
+import Video from "../../../models/video";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,15 +9,14 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400).send("");
 
-  const { url, unitId } = req.body;
-  if (!url || !unitId) return res.status(400).send("");
-  const session = await getSession({ req });
-  if (!session?.user) return res.status(401).send("");
-  console.log("AAA");
-  const v = new Video({ content: url, authorId: session.user._id, unitId });
-  const p = await v.save();
-  console.log("bbbb");
-  await Unit.findByIdAndUpdate(unitId, { $push: { videos: p._id } });
+  const { type } = req.query;
+  const { vote, id } = req.body;
+  if (!type || !vote || !id) return res.status(400).send("");
+
+  if (type === "problem")
+    await Problem.findByIdAndUpdate(id, { $inc: { score: vote } });
+  else if (type === "video")
+    await Video.findByIdAndUpdate(id, { $inc: { score: vote } });
 
   res.status(200).send("");
 }
