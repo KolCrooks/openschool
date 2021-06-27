@@ -15,10 +15,8 @@ export default async function handler(
   if (!url || !unitId) return res.status(400).send("");
   const session = await getSession({ req });
   if (!session?.user) return res.status(401).send("");
-  console.log("AAA");
   const v = new Video({ content: url, authorId: session.user._id, unitId });
   const p = await v.save();
-  console.log("bbbb");
   await Unit.findByIdAndUpdate(unitId, { $push: { videos: p._id } });
 
   res.status(200).send("");
