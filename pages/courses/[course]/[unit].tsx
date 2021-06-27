@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { GetStaticPaths, GetStaticProps } from "next";
 import { FullCourse, ICourse } from "../../../models/course";
 import { FullUnit, IUnit } from "../../../models/unit";
