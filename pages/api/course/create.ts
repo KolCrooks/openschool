@@ -16,8 +16,8 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400).send("");
   const { name } = req.body;
   if (!name) return res.status(400).send("");
-  const session = await getSession({ req });
-  if (!session?.user?.isAdmin) return res.status(401).send("");
+  // const session = await getSession({ req });
+  // if (!session?.user?.isAdmin) return res.status(401).send("");
 
   const v = new Course({ name });
   const created = await v.save();
