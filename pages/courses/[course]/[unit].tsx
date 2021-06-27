@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 /* eslint-disable react/no-unescaped-entities */
 import "../../../models";
+=======
+>>>>>>> parent of 589bb55... fixed some errors
 import { GetStaticPaths, GetStaticProps } from "next";
 import Course, { FullCourse, ICourse } from "../../../models/course";
 import { default as UnitDB, FullUnit, IUnit } from "../../../models/unit";
