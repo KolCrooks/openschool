@@ -71,6 +71,7 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
   var embedLink = "";
 
   const handleClickOpenVid = () => {
+    if (!session?.user) return signIn("google");
     vidSetOpen(true);
   };
   const handleCloseVid = async () => {
