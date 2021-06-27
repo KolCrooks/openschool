@@ -1,7 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
+import "../../../models";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { FullCourse, ICourse } from "../../../models/course";
-import { FullUnit, IUnit } from "../../../models/unit";
+import Course, { FullCourse, ICourse } from "../../../models/course";
+import { default as UnitDB, FullUnit, IUnit } from "../../../models/unit";
 import { signIn, useSession } from "next-auth/client";
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles";
 import {
@@ -20,11 +21,11 @@ import {
 import Sidebar from "../../../components/sidebar";
 import Header from "../../../components/header";
 import React, { useEffect, useState } from "react";
-import Video from "../../../components/video";
 import ProblemCard from "../../../components/ProblemCard";
 import ProblemCreator from "../../../components/problemCreator";
 import VideoView from "../../../components/videoView";
-
+import Problem from "../../../models/problem";
+import Video from "../../../models/video";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -186,10 +187,19 @@ export default function Unit(props: { unit: FullUnit; course: FullCourse }) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(`http://${process.env.host}/api/unit/list`);
-  const units = await res.json();
+  const unitsRaw = await UnitDB.find();
 
-  const paths = units.map((u: IUnit) => ({
+  const units = await Promise.all(
+    unitsRaw.map(async (u) => ({
+      _id: u.id,
+      name: u.name,
+      course: await Course.findById(u.course),
+      videos: u.videos,
+      problems: u.problems,
+    }))
+  );
+
+  const paths = units.map((u) => ({
     params: {
       unit: u.name.toLowerCase(),
       course: (u.course as unknown as ICourse).name.toLowerCase(),
@@ -201,13 +211,71 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (!params) throw new Error("help");
 
-  const res = await fetch(`http://${process.env.host}/api/unit/${params.unit}`);
-  const res2 = await fetch(
-    `http://${process.env.host}/api/course/${params.course}`
-  );
+  const unit = await UnitDB.findOne().where({
+    name: { $regex: new RegExp(params.unit as string, "i") },
+  });
+  if (!unit) throw new Error("ERRR");
 
-  const unit: FullUnit = await res.json();
-  const course: FullCourse = await res2.json();
+  const course = await Course.findById(unit.course);
+  if (!course) throw new Error("ERR2");
 
-  return { props: { unit, course } };
+  const u = {
+    _id: unit?.id,
+    name: unit.name,
+    course: {
+      _id: course.id,
+      name: course.name,
+      units: course.units.map((u) => u.toString()),
+    },
+    videos: await Promise.all(
+      unit.videos.map(async (v) => {
+        const vid = await Video.findById(v);
+        if (!vid) throw new Error("THEWEEW");
+        return {
+          authorId: vid.authorId,
+          content: vid.content,
+          score: vid.score,
+          unitId: vid.unitId,
+          created: vid.created,
+        };
+      })
+    ),
+    problems: await Promise.all(
+      unit.problems.map(async (p) => {
+        const prob = await Problem.findById(p);
+        if (!prob) throw new Error("THEWEEW");
+        return {
+          _id: prob.id,
+          authorId: prob.authorId,
+          content: prob.content,
+          solution: prob.solution,
+          score: prob.score,
+          unitId: prob.unitId,
+          created: prob.created,
+        };
+      })
+    ),
+  };
+
+  const c = {
+    _id: course.id,
+    name: course.name,
+    units: await Promise.all(
+      course.units.map(async (p) => {
+        const u = await UnitDB.findById(p);
+
+        if (!u) throw new Error("HELP!");
+        return {
+          _id: u.id,
+          name: u.name,
+          course: u.course.toString(),
+          videos: u.videos.map((v) => v.toString()),
+          problems: u.problems.map((p) => p.toString()),
+        };
+      })
+    ),
+  };
+  console.log(u.course.units);
+
+  return { props: { unit: u, course: c } };
 };

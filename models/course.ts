@@ -31,5 +31,4 @@ const course = new Schema<ICourse>({
 const Course: mongoose.Model<ICourse, {}, {}> = mongoose.models.Course
   ? mongoose.models.Course
   : mongoose.model<ICourse>("Course", course);
-Course.ensureIndexes();
 export default Course;

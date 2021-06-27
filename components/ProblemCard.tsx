@@ -52,7 +52,7 @@ export default function ProblemCard(props: { problem: IProblem }) {
   const classes = useStyles();
   const [vote, _setVote] = useState("0");
   const [offset, setOffset] = useState(0);
-  console.log(vote, offset, props.problem.score);
+
   const setVote = (v: string) => {
     window.localStorage.setItem(props.problem._id, v);
     _setVote(v);
