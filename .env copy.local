@@ -1,3 +1,0 @@
-mongodb = "mongodb+srv://client:tiEGHr3QHe6co7Dp@cluster0.2n7pu.mongodb.net/Cluster0?retryWrites=true&w=majority"
-host = "localhost:3000"
-GOOGLE_SECRET = "wqv1OfIdVQ_gb7Tcg-UE8dzC"
